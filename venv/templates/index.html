@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPX Viewer</title>
+</head>
+<body>
+    <h1>GPX Viewer</h1>
+
+    <h2>Filter</h2>
+    <form action="{{ url_for('filter_tracks') }}" method="POST">
+        <label for="vehicle">Fahrzeug:</label>
+        <select name="vehicle" id="vehicle">
+            <option value="">Beliebig</option>
+            {% for vehicle in vehicles %}
+                <option value="{{ vehicle[0] }}">{{ vehicle[0] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="driver">Fahrer:</label>
+        <select name="driver" id="driver">
+            <option value="">Beliebig</option>
+            {% for driver in drivers %}
+                <option value="{{ driver[0] }}">{{ driver[0] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="date_from">Von:</label>
+        <input type="date" name="date_from" id="date_from">
+
+        <label for="date_to">Bis:</label>
+        <input type="date" name="date_to" id="date_to">
+
+        <button type="submit">Filtern</button>
+    </form>
+
+    <h2>Neue GPX-Datei hochladen</h2>
+    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+        <label for="vehicle">Fahrzeug:</label>
+        <input type="text" name="vehicle" id="vehicle" placeholder="Fahrzeug">
+
+        <label for="driver">Fahrer:</label>
+        <input type="text" name="driver" id="driver" placeholder="Fahrer">
+
+        <label for="date">Datum:</label>
+        <input type="date" name="date" id="date">
+
+        <input type="file" name="file" required>
+        <button type="submit">Hochladen</button>
+    </form>
+</body>
+</html>
