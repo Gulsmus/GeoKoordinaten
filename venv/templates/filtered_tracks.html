@@ -10,7 +10,7 @@
     <ul>
         {% for track in tracks %}
             <li>
-                <a href="{{ url_for('view_track', track_id=track.id) }}">{{ track.name }} ({{ track.vehicle }} - {{ track.driver }})</a>
+                <a href="{{ url_for('view_track', track_id=track.id) }}">{{ track.name }} ({{ track.vehicle.name }} - {{ track.driver.name }})</a>
             </li>
         {% endfor %}
     </ul>
