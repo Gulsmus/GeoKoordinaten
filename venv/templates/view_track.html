@@ -6,15 +6,14 @@
     <title>{{ track.name }}</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <style>
-        #map { height: 500px; width: 100%; }
+        #map { height: 625px; width: 100%; }
     </style>
 </head>
 <body>
-    <h1>{{ track.name }}</h1>
+    <h1 align="center">{{ track.name }} -- {{ driver.name }} -- {{vehicle.name}}
+    -- {{track.date}}</h1>
 
-    <h2>Statistiken</h2>
-    <p>Gesamtlänge: {{ total_distance }} km</p>
-    <p>Durchschnittsgeschwindigkeit: {{ avg_speed }} km/h</p>
+    
 
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -34,5 +33,14 @@
             L.marker(point).addTo(map);
         });
     </script>
+    
+    <h2 align="center">Statistiken</h2>
+    <table align="center">
+    <tr>
+    <td>Gesamtlänge:</td> <td>{{ total_distance }} km</td>
+    </tr><tr>
+    <td>Durchschnittsgeschwindigkeit:</td><td>{{ avg_speed }} km/h</td>
+    <tr>
+    </table>
 </body>
 </html>
