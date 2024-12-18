@@ -27,7 +27,7 @@ def parse_gpx(file_path):
         start_time = None
         end_time = None
         
-        print(gpx)
+        #print(gpx)
         tracks = []
         for waypoint in gpx.waypoints:
             coordinates.append((waypoint.latitude,waypoint.longitude,waypoint.elevation,0.0,waypoint.time))
@@ -89,7 +89,7 @@ def calculate_avg_speed(total_distance, start_time, end_time):
   avg_speed = 0
   if total_distance != 0 and start_time is not None and end_time is not None:
     track_time = (end_time - start_time).total_seconds()/3600 #Umwandlung von Sekunden in Stunden
-    print(track_time)
+    #print(track_time)
     avg_speed = round(total_distance/track_time,2)
   return avg_speed
 
@@ -161,18 +161,30 @@ def filter_tracks():
     date_from = request.form.get('date_from')
     date_to = request.form.get('date_to')
 
-    query = session.query(Track)
+    query = session.query(Driver.name,Track.id,Track.name,Track.date,Vehicle.name).join(Track, Driver.id == Track.driver_id).join(Vehicle, Track.vehicle_id == Vehicle.id)
+
+    #query = session.query(Track).join(Vehicle).join(Driver)
     if vehicle_name:
-        query = query.join(Vehicle).filter(Vehicle.name==vehicle_name)
+        query = query.filter(Vehicle.name == vehicle_name)
     if driver_name:
-        query = query.join(Driver).filter(Driver.name ==driver_name)
+        query = query.filter(Driver.name == driver_name)
     if date_from:
         query = query.filter(Track.date >= date_from)
     if date_to:
         query = query.filter(Track.date <= date_to)
 
     tracks = query.order_by(Track.date.asc()).all()
-    return render_template('filtered_tracks.html', tracks=tracks)
+    driver_combinations = {}
+    for track in tracks:
+        driver = track[0]
+        vehicle = track[-1]
+        if driver not in driver_combinations:
+            driver_combinations[driver] = {}
+        if vehicle not in driver_combinations[driver]:
+            driver_combinations[driver][vehicle] = []
+        driver_combinations[driver][vehicle].append(track[1:-1])
+    #print(driver_combinations)
+    return render_template('filtered_tracks.html', tracks = driver_combinations)
 
 @app.route('/track/<int:track_id>')
 def view_track(track_id):
@@ -201,4 +213,5 @@ if __name__ == '__main__':
     #with app.app_context():
         #db.drop_all()
         #db.create_all()
-    app.run(host='0.0.0.0',debug=True,port=5000)
+    #app.run(host='0.0.0.0',debug=True,port=5000)
+    app.run(debug=True)
